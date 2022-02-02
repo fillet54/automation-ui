@@ -1,0 +1,28 @@
+
+/* Custom Colors */
+.fg-ngc-blue-50  { color: #8093cd; }
+.fg-ngc-blue-100 { color: #667dc2; }
+.fg-ngc-blue-200 { color: #4d67b8; }
+.fg-ngc-blue-300 { color: #3351ae; }
+.fg-ngc-blue-400 { color: #1a3ca4; }
+.fg-ngc-blue-500 { color: #00269a; }
+.fg-ngc-blue-600 { color: #00228b; }
+.fg-ngc-blue-700 { color: #001e7b; }
+.fg-ngc-blue-800 { color: #001b6c; }
+.fg-ngc-blue-900 { color: #00175c; }
+
+.hover\:bg-ngc-blue-400:hover { background-color: rgba(26,60,164,var(--tw-bg-opacity)); }
+.hover\:bg-ngc-blue-500:hover { background-color: rgba(0,39,154,var(--tw-bg-opacity)); }
+.hover\:bg-ngc-blue-600:hover { background-color: rgba(0,34,139,var(--tw-bg-opacity)); }
+.hover\:bg-ngc-blue-700:hover { background-color: rgba(0,32,123,var(--tw-bg-opacity)); }
+
+.bg-ngc-blue-50  { background-color: #8093cd; }
+.bg-ngc-blue-100 { background-color: #667dc2; }
+.bg-ngc-blue-200 { background-color: #4d67b8; }
+.bg-ngc-blue-300 { background-color: #3351ae; }
+.bg-ngc-blue-400 { background-color: #1a3ca4; }
+.bg-ngc-blue-500 { background-color: #00279a; }
+.bg-ngc-blue-600 { background-color: #00228b; }
+.bg-ngc-blue-700 { background-color: #001e7b; }
+.bg-ngc-blue-800 { background-color: #001b6c; }
+.bg-ngc-blue-900 { background-color: #00175c; }

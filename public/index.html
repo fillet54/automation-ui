@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="/css/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/tailwind.min.css">
+</head>
+
+<body>
+
+    <div id="root"></div>
+
+
+    <script type="importmap">
+    {
+      "imports": {
+        "react": "/js/react/umd/react.production.min.js",
+        "react-dom": "/js/react-dom/umd/react-dom.production.min.js",
+        "react-router": "/js/react-router/umd/react-router.min.js",
+        "react-router-dom": "/js/react-router-dom/umd/react-router-dom.min.js",
+        "classnames": "/js/classnames/index.js"
+      }
+    }
+    </script>
+
+    <script type="module">
+
+        if ('serviceWorker' in navigator) {
+            (async () => {
+
+                try {
+
+                    const config = {
+                        exportsMap: {
+                            'react': {
+                                defaultName: 'React',
+                                exports: ['useState']
+                            },
+                            'react-dom': {
+                                defaultName: 'ReactDOM',
+                                exports: []
+                            },
+                            'react-router': {
+                                defaultName: 'ReactRouter',
+                                exports: []
+                            },
+                            'react-router-dom': {
+                                defaultName: 'ReactRouterDOM',
+                                exports: ['BrowserRouter', 'HashRouter', 'Link', 'MemoryRouter', 'NavLink',
+                                    'Prompt', 'Redirect', 'Route', 'Router', 'StaticRouter', 'Switch',
+                                    'generatePath', 'matchPath', 'useHistory', 'useLocation', 'useParams',
+                                    'useRouteMatch', 'withRouter']
+                            },
+                            'classnames': {
+                                defaultName: 'classNames',
+                                exports: []
+                            }
+                        }
+                    };
+
+                    const registration = await navigator.serviceWorker.register('sw.js?' + JSON.stringify(config));
+
+                    await navigator.serviceWorker.ready;
+
+                    const launch = async () => {
+                        await import("/src/App.jsx");
+                    };
+
+                    // this launches the React app if the SW has been installed before or immediately after registration
+                    // https://developers.google.com/web/fundamentals/primers/service-workers/lifecycle#clientsclaim
+                    if (navigator.serviceWorker.controller) {
+                        await launch();
+                    } else {
+                        navigator.serviceWorker.addEventListener('controllerchange', launch);
+                    }
+
+                } catch (error) {
+                    console.error('Service worker registration failed', error.stack);
+                }
+
+            })();
+        } else {
+            alert('Service Worker is not supported');
+        }
+    </script>
+
+</body>
+
+</html>
