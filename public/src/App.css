@@ -26,3 +26,7 @@
 .bg-ngc-blue-700 { background-color: #001e7b; }
 .bg-ngc-blue-800 { background-color: #001b6c; }
 .bg-ngc-blue-900 { background-color: #00175c; }
+
+.cursor-col-resize {
+  cursor: col-resize;
+}

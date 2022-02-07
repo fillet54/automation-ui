@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import logo from '../logo.svg';
+import logo from '../logo.png';
 import { Link, useParams } from 'react-router-dom';
 
 const NavLink = ({ children, page }) => {
@@ -22,14 +22,14 @@ const NavLink = ({ children, page }) => {
 const NavBar = () => {
     return (
         <nav className="bg-ngc-blue-500">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex items-center justify-between h-16">
+            <div className="w-full px-2">
+                <div className="flex items-center justify-between h-12">
                     <div className="flex items-center">
                         <div className="flex-shrink-0">
-                            <img className="h-12 w-12" src={logo} alt="Workflow" />
+                            <img className="h-8" src={logo} alt="Workflow" />
                         </div>
                         <div className="hidden md:block">
-                            <div className="ml-10 flex items-baseline space-x-4">
+                            <div className="ml-6 flex items-baseline space-x-4">
                                 <NavLink page="dashboard">Dashboard</NavLink>
                                 <NavLink page="team">Team</NavLink>
                                 <NavLink page="projects">Projects</NavLink>

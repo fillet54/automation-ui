@@ -4,6 +4,7 @@
 <head>
     <link rel="stylesheet" href="/css/font-awesome-4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/css/tailwind.min.css">
+    <link rel="stylesheet" href="/js/prismjs/themes/prism.css">
 </head>
 
 <body>
@@ -34,7 +35,16 @@
                         exportsMap: {
                             'react': {
                                 defaultName: 'React',
-                                exports: ['useState']
+                                exports: ['createRef', 'Component', 'PureComponent',
+                                    'createContext', 'forwardRef', 'lazy',
+                                    'memo', 'useCallback', 'useContext',
+                                    'useEffect', 'useImperativeHandle',
+                                    'useDebugValue', 'useLayoutEffect',
+                                    'useMemo', 'useReducer', 'useRef',
+                                    'useState', 'Fragment', 'Profiler',
+                                    'StrictMode', 'Suspense', 'createElement',
+                                    'cloneElement', 'createFactory',
+                                    'isValidElement', 'version']
                             },
                             'react-dom': {
                                 defaultName: 'ReactDOM',

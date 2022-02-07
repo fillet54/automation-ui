@@ -9,7 +9,7 @@ const Layout = ({ children }) => {
             <Route exact path='/' component={NavBar} />
             <Route path="/:page" component={NavBar} />
             <main>
-                <div class="mx-auto py-6">
+                <div class="h-full">
                     {children}
                 </div>
             </main>
