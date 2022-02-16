@@ -6,7 +6,9 @@ const ReportsPage = () => {
     return (
         <SplitPane>
             <h1>Reports</h1>
-            <CodeEditor language="python"></CodeEditor>
+            <div style={{ width: 500, minHeight: 75 }}>
+                <CodeEditor language="python"></CodeEditor>
+            </div>
         </SplitPane>
     );
 }

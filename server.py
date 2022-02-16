@@ -11,9 +11,21 @@ def home_handler(request):
     return {'status': 200,
             'body': b"HELLO WORLD"}
 
+import time
+import json 
+def stream_handler(request):
+    def the_stream():
+        for i in xrange(10):
+            yield 'event: myevent\ndata: {}\n\n\n'.format(i, json.dumps(dict(name="Phillip")))
+            time.sleep(10)
+    return dict(
+        status = 200,
+        headers = [('Content-Type', 'text/event-stream')],
+        body = the_stream());
+    
 routes = [
     GET('/api/home', home_handler),
-
+    GET('/stream', stream_handler),
     GET('/*', static_resources)
 ]
 app = site_handler(routes=routes, default_handler=not_found_response)

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 const CodeEditor = props => {
-    const [content, setContent] = useState(props.content);
+    const [content, setContent] = useState("Hello 123");
     const [highlighted, setHighlighted] = useState(props.content);
 
     const handleKeyDown = evt => {
@@ -22,6 +22,7 @@ const CodeEditor = props => {
         }
     };
 
+    // no need to be in useEffect
     useEffect(() => {
         if (content) {
             let tmp = content;
@@ -37,20 +38,18 @@ const CodeEditor = props => {
     }, [props.language, content]);
 
     return (
-        <div className="overflow-auto" style={{ maxHeight: 400 }}>
-            <div className="relative" style={{ width: 400 }}>
-                <textarea
-                    className="text-black text-opacity-0 w-full text-base font-mono absolute bg-gray-100 px-2 overflow-hidden"
-                    value={content}
-                    onChange={evt => setContent(evt.target.value)}
-                    onKeyDown={handleKeyDown}
-                    spellCheck={false}
-                    style={{ caretColor: 'black', outline: 0 }}
-                />
-                <pre className="pointer-events-none relative whitespace-pre-wrap w-full text-base font-mono px-2 overflow-hidden"
-                    dangerouslySetInnerHTML={{ __html: highlighted }}>
-                </pre>
-            </div>
+        <div className="w-full h-full relative box-border p-0 overflow-hidden rounded-sm">
+            <textarea
+                className="m-0 border-0 text-black text-opacity-0 w-full h-full text-base font-mono absolute px-2 overflow-hidden bg-white bg-opacity-0"
+                value={content}
+                onChange={evt => setContent(evt.target.value)}
+                onKeyDown={handleKeyDown}
+                spellCheck={false}
+                style={{ caretColor: 'black', outline: 0, minHeight: 50 }}
+            />
+            <pre className="pointer-events-none relative whitespace-pre-wrap w-full text-base font-mono px-2 overflow-hidden bg-gray-400"
+                dangerouslySetInnerHTML={{ __html: highlighted }}>
+            </pre>
         </div>
     );
 };
