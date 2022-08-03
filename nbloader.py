@@ -3,6 +3,7 @@ import os
 import sys
 import types
 import logging
+import re
 
 from IPython import get_ipython
 from nbformat import read
@@ -32,8 +33,9 @@ def find_notebook(fullname, path=None):
             return nb_path
 
 
+export_cell_pattern = re.compile(r"^#\s*export")
 def is_marked_export(cell):
-    return cell.source.strip().lower().startswith('#export')
+    return export_cell_pattern.match(cell.source.strip().lower()) is not None
 
 class NotebookLoader(object):
     """Module Loader for Jupyter Notebooks"""
@@ -102,3 +104,28 @@ class NotebookFinder(object):
 
 def install_loader():
     sys.meta_path.append(NotebookFinder())
+    
+def export_module(fullname, module_name, path):
+    module = None
+    
+    path = find_notebook(fullname, path)
+
+    # load the notebook object
+    with io.open(path, 'r', encoding='utf-8') as f:
+        nb = read(f, 4)
+    
+    cell_sources = [cell.source
+                    for cell in nb.cells
+                    if cell.cell_type == 'code' and is_marked_export(cell)]
+    
+    def sort_cells(s):
+        first, *rest = s.splitlines()
+        return export_cell_pattern.sub('', first).strip()
+    
+    
+    with open(f"{module_name}.py", 'w') as f:
+        for code in sorted(cell_sources, key=sort_cells):
+            f.write('#cell\n')
+            first, *rest = code.splitlines()
+            f.write('\n'.join(rest))
+            f.write('\n')
