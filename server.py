@@ -1,8 +1,12 @@
 from wsgiref.util import setup_testing_defaults
 from wsgiref.simple_server import make_server, WSGIServer
-from SocketServer import ThreadingMixIn
 
-from qroutes import GET, resource_response, wsgi_adapter, site_handler, not_found_response, file_response
+try:
+    from socketserver import ThreadingMixIn
+except:
+    from SocketServer import ThreadingMixIn
+
+from qroutes import GET, resource_response, wsgi_adapter, site_handler, not_found_response, file_response, GzipMiddleware
 
 static_resources = resource_response('./public', default_file='index.html')
 
@@ -29,6 +33,8 @@ routes = [
     GET('/*', static_resources)
 ]
 app = site_handler(routes=routes, default_handler=not_found_response)
+app = wsgi_adapter(app)
+#app = GzipMiddleware(app)
 
 class ThreadingWSGIServer(ThreadingMixIn, WSGIServer):
     daemon_threads = True
@@ -37,7 +43,7 @@ if __name__ == '__main__':
     
     PORT = 8056
 
-    httpd = make_server('', PORT, wsgi_adapter(app), ThreadingWSGIServer)
+    httpd = make_server('', PORT, app, ThreadingWSGIServer)
 
     print("Serving on port {}...".format(PORT))
     try:
