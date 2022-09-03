@@ -23,7 +23,6 @@ const TreeNode = ({ node, treeData, selectedNode, setSelectedNode, level }) => {
         setSelectedNode(node)
     }
 
-    console.log(selectedNode)
 
     const chevron = (
         <i className={classNames('fa', 'fa-fw', { 'fa-chevron-down': isOpen, 'fa-chevron-right': !isOpen })} />);
@@ -38,16 +37,19 @@ const TreeNode = ({ node, treeData, selectedNode, setSelectedNode, level }) => {
     });
 
     return (
-        <div className={classNames({ 'pl-5': !node.isRoot })}>
+        <div>
             <div onClick={toggleOpenClose}
-                className={classNames({ 'bg-blue-200': node === selectedNode }, 'text-xs', 'whitespace-nowrap')}>
+                className={classNames({
+                    'bg-blue-200': node === selectedNode && !node.isRoot,
+                    'bg-gray-500 text-white text-bold': node.isRoot
+                }, 'text-xs', 'whitespace-nowrap')}>
                 {node.type === 'folder' && chevron}
                 {node.type === 'file' && <i className="fa fa-fw fa-file-o" />}
                 {node.type === 'folder2' && isOpen === true && <i className="fa fa-fw fa-folder-open" />}
                 {node.type === 'folder2' && !isOpen && <i className="fa fa-fw fa-folder" />}
                 {getNodeLabel(node)}
             </div>
-            <div>
+            <div className="ml-2 border-l">
                 {isOpen && children.map((childNode) => {
                     return (<TreeNode
                         key={childNode.path}
