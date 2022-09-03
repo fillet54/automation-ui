@@ -6,7 +6,8 @@ try:
 except:
     from SocketServer import ThreadingMixIn
 
-from qroutes import GET, resource_response, wsgi_adapter, site_handler, not_found_response, file_response, GzipMiddleware
+from qroutes import GET, resource_response, wsgi_adapter, site_handler, not_found_response, file_response, GzipMiddleware, wrap_json_response
+from navigation import rvt_tree_handler
 
 static_resources = resource_response('./public', default_file='index.html')
 
@@ -29,10 +30,12 @@ def stream_handler(request):
     
 routes = [
     GET('/api/home', home_handler),
+    GET('/api/nav/tree/rvt', rvt_tree_handler),
     GET('/stream', stream_handler),
     GET('/*', static_resources)
 ]
 app = site_handler(routes=routes, default_handler=not_found_response)
+app = wrap_json_response(app)
 app = wsgi_adapter(app)
 #app = GzipMiddleware(app)
 

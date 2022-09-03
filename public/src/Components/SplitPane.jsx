@@ -11,13 +11,13 @@ function unFocus(document, window) {
   }
 }
 
-const Pane = React.forwardRef(({ size, children }, ref) => {
+const Pane = React.forwardRef(({ size, children, className }, ref) => {
   const style = {
     width: size
   };
 
   return (
-    <div ref={ref} style={style}>
+    <div ref={ref} style={style} className={className}>
       {children}
     </div>
   );
@@ -80,7 +80,7 @@ const SplitPane = ({ children, minSize = 50, initSize = 200 }) => {
 
   return (
     <div className="flex">
-      <Pane ref={leftPane} size={size}>
+      <Pane ref={leftPane} size={size} className="overflow-x-auto overflow-y-auto">
         {children[0]}
       </Pane>
       <Resizer onMouseDown={onMouseDown} onMouseUp={onMouseUp} />

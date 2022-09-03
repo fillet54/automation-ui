@@ -257,7 +257,10 @@ def wsgi_adapter(handler):
             raise UnknownHTTPStatus('Unknown response code {0}'.format(status))
 
         start_response(status, headers)
-        return body
+        if isinstance(body, (str, bytes)):
+            return [body]
+        else:
+            return body
     return wsgi_handler
 
 ################################################################################
@@ -304,6 +307,7 @@ def wrap_json_response(handler):
                                                   indent=4 )
                 else:
                     response['body'] = json.dumps(response['body']) 
+                response['body'] = response['body'].encode('utf-8')
         return response
     return json_response_handler
 

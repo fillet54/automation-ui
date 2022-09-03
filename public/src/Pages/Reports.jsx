@@ -1,14 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import SplitPane from '../Components/SplitPane';
 import CodeEditor from '../Components/Editor';
+import TreeView from '../Components/TreeView';
+import { getRvtTree } from '../Services/navigation.js';
 
 const ReportsPage = () => {
+    const [rvtTree, setRvtTree] = useState([]);
+
+    useEffect(() => {
+        getRvtTree(setRvtTree);
+    }, []);
+
     return (
         <SplitPane>
-            <h1>Reports</h1>
-            <div style={{ width: 500, minHeight: 75 }}>
-                <CodeEditor language="python"></CodeEditor>
-            </div>
+            <TreeView treeData={rvtTree}></TreeView>
+            <CodeEditor language="python"></CodeEditor>
         </SplitPane>
     );
 }

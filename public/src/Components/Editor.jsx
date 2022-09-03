@@ -21,8 +21,8 @@ const CodeEditor = props => {
     }, []);
 
     return (
-        <div>
-            <textarea ref={editorEl}></textarea>
+        <div className="w-1/2">
+            <textarea classNames="w-full h-full" ref={editorEl}></textarea>
         </div>
     );
 };
