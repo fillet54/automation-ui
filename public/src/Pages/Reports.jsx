@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import SplitPane from '../Components/SplitPane';
+import Split from 'react-split';
 import CodeEditor from '../Components/Editor';
 import TreeView from '../Components/TreeView';
 import { getRvtTree } from '../Services/navigation.js';
@@ -12,10 +12,21 @@ const ReportsPage = () => {
     }, []);
 
     return (
-        <SplitPane>
+        <Split
+            sizes={[25, 75]}
+            minSize={100}
+            expandToMin={false}
+            gutterSize={10}
+            gutterAlign="center"
+            snapOffset={30}
+            dragInterval={1}
+            direction="horizontal"
+            cursor="col-resize"
+            className="split flex-grow"
+        >
             <TreeView treeData={rvtTree}></TreeView>
             <CodeEditor language="python"></CodeEditor>
-        </SplitPane>
+        </Split>
     );
 }
 export default ReportsPage;

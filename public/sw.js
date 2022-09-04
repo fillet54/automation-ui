@@ -124,7 +124,8 @@ self.addEventListener('fetch', (event) => {
                             'react',
                         ],
                         plugins: [
-                            'transform-es2015-destructuring'
+                            'transform-es2015-destructuring',
+                            'syntax-object-rest-spread'
                         ],
                         sourceMaps: true
                     }).code,

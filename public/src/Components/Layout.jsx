@@ -8,9 +8,7 @@ const Layout = ({ children }) => {
         <div className="min-h-screen flex flex-col">
             <Route exact path='/' component={NavBar} />
             <Route path="/:page" component={NavBar} />
-            <main className="flex w-full flex-grow">
-                {children}
-            </main>
+            {children}
         </div>
     )
 }
