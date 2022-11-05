@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Split from 'react-split';
-import CodeEditor from '../Components/Editor';
+import PlainTextEditor from '../Components/Editor';
 import TreeView from '../Components/TreeView';
 import { getRvtTree } from '../Services/navigation.js';
 
@@ -25,7 +25,7 @@ const ReportsPage = () => {
             className="split flex-grow"
         >
             <TreeView treeData={rvtTree}></TreeView>
-            <CodeEditor language="python"></CodeEditor>
+            <PlainTextEditor language="python"></PlainTextEditor>
         </Split>
     );
 }

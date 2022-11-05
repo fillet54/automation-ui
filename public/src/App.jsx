@@ -9,6 +9,7 @@ import {
 import Layout from './Components/Layout'
 import IndexPage from './Pages/Index';
 import ReportsPage from './Pages/Reports';
+import QueuePage from './Pages/Queue';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -18,6 +19,7 @@ ReactDOM.render(
           <Route exact path='/' component={IndexPage} />
           <Route exact path='/dashboard' component={IndexPage} />
           <Route exact path='/reports' component={ReportsPage} />
+          <Route exact path='/queue' component={QueuePage} />
         </Switch>
       </Layout>
     </Router>

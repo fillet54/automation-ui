@@ -4,6 +4,8 @@ const { exportsMap } = JSON.parse((decodeURIComponent(self.location.search) || '
 // version I have available
 importScripts('/js/babel/babel.min.js');
 
+// This can help to figure out what plugins are available to use
+console.log(Babel.availablePlugins)
 //this is needed to activate the worker immediately without reload
 //@see https://developers.google.com/web/fundamentals/primers/service-workers/lifecycle#clientsclaim
 self.addEventListener('activate', event => event.waitUntil(clients.claim()));
