@@ -42,7 +42,7 @@ const TreeNode = ({ node, treeData, selectedNode, setSelectedNode, level }) => {
                 className={classNames({
                     'bg-blue-200': node === selectedNode && !node.isRoot,
                     'bg-gray-500 text-white text-bold': node.isRoot
-                }, 'text-xs', 'whitespace-nowrap')}>
+                }, 'text-sm', 'whitespace-nowrap')}>
                 {node.type === 'folder' && chevron}
                 {node.type === 'file' && <i className="fa fa-fw fa-file-o" />}
                 {node.type === 'folder2' && isOpen === true && <i className="fa fa-fw fa-folder-open" />}
@@ -64,9 +64,16 @@ const TreeNode = ({ node, treeData, selectedNode, setSelectedNode, level }) => {
 };
 
 
-const TreeView = ({ treeData }) => {
+const TreeView = ({ treeData, onSelected }) => {
     const [selectedNode, setSelectedNode] = useState(null)
     const roots = getRoots(treeData);
+
+    const makeSelection = (node) => {
+        if (onSelected) {
+            onSelected(node);
+        }
+        setSelectedNode(node);
+    }
 
     return (
         <div>
@@ -77,7 +84,7 @@ const TreeView = ({ treeData }) => {
                         node={node}
                         treeData={treeData}
                         selectedNode={selectedNode}
-                        setSelectedNode={setSelectedNode}
+                        setSelectedNode={makeSelection}
                     />))
             }
         </div>

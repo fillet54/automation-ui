@@ -75,7 +75,7 @@ def find_path_keys(path):
     clauses = [(r"\*", "*"),
                (re_word, word_group),
                (re_literal, None)]
-    return filter(lambda x: x != None, lex(path, clauses))
+    return list(filter(lambda x: x != None, lex(path, clauses)))
 
 class CompiledRoute(object):
     def __init__(self, source, regex, keys):
@@ -102,6 +102,25 @@ def route_compile(path, regexs=dict()):
     return CompiledRoute(path, 
                          build_route_regex(path, regexs), 
                          path_keys)
+
+################################################################################
+# RESPONSE HELPERS 
+################################################################################
+def RESPONSE(status, body, headers=None):
+    if isinstance(body, str):
+        body = body.encode('utf-8')
+    response = {
+        'status': status,
+        'body': body
+    }
+    if headers:
+        response['headers'] = headers
+    return response
+
+def SUCCESS(body, headers=None):
+    return RESPONSE(200, body, headers)
+
+JSON_CONTENT = [('Content-Type', 'application/json')]
 
 ################################################################################
 # ROUTER API
@@ -141,6 +160,29 @@ def POST(path, handler):
 def route_context(context, *routes):
     return dict(context=context,
                 routes=routes)
+
+def context(prefix):
+    class ContextBuilder:
+        def __init__(self, prefix):
+            self.prefix = prefix
+            self._routes = []
+
+        def GET(self, path):
+            def wrapper(f):
+                self._routes.append(GET(path, f))
+                return f
+            return wrapper
+            
+        def POST(self, path):
+            def wrapper(f):
+                self._routes.append(POST(path, f))
+                return f
+            return wrapper
+
+        @property
+        def routes(self):
+            return route_context(self.prefix, self._routes)
+    return ContextBuilder(prefix)
 
 def not_found_response(request):
     return {
@@ -198,7 +240,8 @@ def wsgi_environ_to_ring_request(environ):
     '''Convert wsgi environment to a ring request
 
     '''
-    ring_request = {} 
+    ring_request = {}
+    remapped = set()
 
     if 'wsgi.input' in ring_request:
         ring_request['body'] = ring_request['wsgi.input'].read()
@@ -219,6 +262,7 @@ def wsgi_environ_to_ring_request(environ):
     for wsgi, ring in mappings:
         if wsgi in environ:
             ring_request[ring] = environ[wsgi]
+            remapped.add(wsgi)
 
     # headers
     ring_request['headers'] = {}
@@ -226,11 +270,18 @@ def wsgi_environ_to_ring_request(environ):
     for k in header_keys:
         header_name = '-'.join([w.lower().capitalize() for w in k[5:].split('_')])
         ring_request['headers'][header_name] = environ[k]
+        remapped.add(k)
 
     # special header cases 
     for _from, to in (('CONTENT_TYPE', 'Content-Type'), ('CONTENT_LENGTH', 'Content-Length')):
         if _from in environ:
             ring_request['headers'][to] = environ[_from]
+            remapped.add(_from)
+
+    # All other unmapped keys
+    for k in environ.keys():
+        if k not in remapped:
+            ring_request[k] = environ[k]
 
     return ring_request
 
@@ -519,7 +570,6 @@ def resource_response(root, default_file='', defaultType=default_mime):
             if default_file == '' or not os.path.exists(full_path):
                 return None 
 
-        print("FULLPATH", full_path)
         extension = full_path.split('.')[-1]
         guessed_type = mimetypes.guess_type(full_path)
         mime_type = extended_mimes.get(extension, guessed_type[0] or defaultType) 

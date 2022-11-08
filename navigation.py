@@ -1,6 +1,7 @@
 import os, subprocess
 import json
 import config
+from urllib.parse import parse_qs
 
 def find_git_root(path):
     return subprocess.Popen(['git', 'rev-parse', '--show-toplevel'], stdout=subprocess.PIPE).communicate()[0].rstrip()
@@ -62,4 +63,21 @@ def rvt_tree_handler(request):
         'status': 200,
         'headers': [('Content-Type', 'application/json')],
         'body': tree_data  
+    }
+
+def get_file(request):
+    path = parse_qs(request['query-string']).get('path', [None])[0]
+    if path is None: return { 'status': 404 }
+
+    # Currently hardcoded to first directory
+    root = config.rvt_paths[0]
+    path = path[4:]
+    
+    with open(os.path.join(root, path), 'rb') as f:
+        text = f.read()
+
+    return {
+        'status': 200,
+        'headers': [('Content-Type', 'text/plain')],
+        'body': text
     }

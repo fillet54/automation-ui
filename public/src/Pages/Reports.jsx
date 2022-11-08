@@ -2,13 +2,15 @@ import React, { useEffect, useState } from 'react';
 import Split from 'react-split';
 import PlainTextEditor from '../Components/Editor';
 import TreeView from '../Components/TreeView';
-import { getRvtTree } from '../Services/navigation.js';
+import { fetchRvtTree } from '../Services/navigation.js';
 
 const ReportsPage = () => {
     const [rvtTree, setRvtTree] = useState([]);
+    const [selectedFile, setSelectedFile] = useState(null)
 
     useEffect(() => {
-        getRvtTree(setRvtTree);
+        fetchRvtTree()
+            .then(treeData => setRvtTree(treeData));
     }, []);
 
     return (
@@ -23,9 +25,10 @@ const ReportsPage = () => {
             direction="horizontal"
             cursor="col-resize"
             className="split flex-grow"
+            style={{ height: "calc(100vh - 48px)" }}
         >
-            <TreeView treeData={rvtTree}></TreeView>
-            <PlainTextEditor language="python"></PlainTextEditor>
+            <TreeView treeData={rvtTree} onSelected={setSelectedFile}></TreeView>
+            <PlainTextEditor language="python" file={selectedFile}></PlainTextEditor>
         </Split>
     );
 }

@@ -6,8 +6,9 @@ try:
 except:
     from SocketServer import ThreadingMixIn
 
-from qroutes import GET, resource_response, wsgi_adapter, site_handler, not_found_response, file_response, GzipMiddleware, wrap_json_response
-from navigation import rvt_tree_handler
+from qroutes import GET, resource_response, wsgi_adapter, site_handler, not_found_response, file_response, GzipMiddleware, wrap_json_response, route_context
+from navigation import rvt_tree_handler, get_file
+import api.tests
 
 static_resources = resource_response('./public', default_file='index.html')
 
@@ -31,6 +32,10 @@ def stream_handler(request):
 routes = [
     GET('/api/home', home_handler),
     GET('/api/nav/tree/rvt', rvt_tree_handler),
+    GET('/api/nav/file', get_file),
+    route_context('/api', 
+       api.tests.routes
+    ),
     GET('/stream', stream_handler),
     GET('/*', static_resources)
 ]
@@ -41,7 +46,7 @@ app = wsgi_adapter(app)
 
 class ThreadingWSGIServer(ThreadingMixIn, WSGIServer):
     daemon_threads = True
-
+# This is just a $REQ123 example
 if __name__ == '__main__':
     
     PORT = 8056

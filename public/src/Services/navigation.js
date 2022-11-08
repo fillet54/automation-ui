@@ -1,7 +1,9 @@
-export const getRvtTree = (setTreeData) => {
-    fetch('/api/nav/tree/rvt')
+export const fetchRvtTree = () => {
+    return fetch('/api/nav/tree/rvt')
         .then(response => response.json())
-        .then(data => {
-            setTreeData(data);
-        });
+}
+
+export const fetchRvt = (path) => {
+    return fetch(`/api/nav/file?path=${path}`)
+        .then(response => response.text())
 }
