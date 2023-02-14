@@ -559,32 +559,40 @@ def file_response(path, defaultType=default_mime):
         }
     return response
 
+from pathlib import Path
 def resource_response(root, default_file='', defaultType=default_mime):
+    root = Path(root)
+
+    print(dir(root))    
     def response(request):
-        path = request['path-info']
-        context = request.get('context', '')
-        full_path = root + path
+        try:
+            path = request['path-info']
+            context = request.get('context', '')
+            full_path = root / path
 
-        if not os.path.isfile(full_path):
-            full_path = "/".join([root, default_file])
-            if default_file == '' or not os.path.exists(full_path):
-                return None 
+            if not os.path.isfile(full_path):
+                full_path =  root / default_file 
+                print(full_path)
+                if default_file == '' or not os.path.exists(full_path):
+                    return None 
 
-        extension = full_path.split('.')[-1]
-        guessed_type = mimetypes.guess_type(full_path)
-        mime_type = extended_mimes.get(extension, guessed_type[0] or defaultType) 
-        file = open(full_path, 'rb')
-        file_size = os.path.getsize(full_path)
+            extension = full_path.suffix
+            guessed_type = mimetypes.guess_type(full_path)
+            mime_type = extended_mimes.get(extension, guessed_type[0] or defaultType) 
+            file = open(full_path, 'rb')
+            file_size = os.path.getsize(full_path)
         
-        headers = [('Content-Type', mime_type),
-                   ('Content-Length', str(file_size)),
-                   ('Cache-Control', 'public')]
+            headers = [('Content-Type', mime_type),
+                       ('Content-Length', str(file_size)),
+                       ('Cache-Control', 'public')]
 
-        return {
-            'status': 200,
-            'headers': headers,
-            'body': FileWrapper(file)
-        }
+            return {
+                'status': 200,
+                'headers': headers,
+                'body': FileWrapper(file)
+            }
+        except  Exception as e:
+            print(e)
 
     return response
 

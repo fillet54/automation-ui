@@ -1,7 +1,8 @@
 import os, subprocess
 import json
-import config
 from urllib.parse import parse_qs
+
+from . import config
 
 def find_git_root(path):
     return subprocess.Popen(['git', 'rev-parse', '--show-toplevel'], stdout=subprocess.PIPE).communicate()[0].rstrip()

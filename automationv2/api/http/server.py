@@ -1,24 +1,25 @@
+import time
+import json 
+from pathlib import Path
 from wsgiref.util import setup_testing_defaults
 from wsgiref.simple_server import make_server, WSGIServer
-
 try:
     from socketserver import ThreadingMixIn
 except:
     from SocketServer import ThreadingMixIn
 
-from qroutes import GET, resource_response, wsgi_adapter, site_handler, not_found_response, file_response, GzipMiddleware, wrap_json_response, route_context
-from navigation import rvt_tree_handler, get_file
-import api.tests
+from .qroutes import GET, resource_response, wsgi_adapter, site_handler, not_found_response, file_response, GzipMiddleware, wrap_json_response, route_context
+from .navigation import rvt_tree_handler, get_file
+from . import tests
 
-static_resources = resource_response('./public', default_file='index.html')
+MODULE_DIR = Path(__file__).resolve().parent
+static_resources = resource_response(MODULE_DIR / "public", default_file='index.html')
 
 def home_handler(request):
     print("HI FROM HOME")
     return {'status': 200,
             'body': b"HELLO WORLD"}
 
-import time
-import json 
 def stream_handler(request):
     def the_stream():
         for i in xrange(10):
@@ -33,9 +34,7 @@ routes = [
     GET('/api/home', home_handler),
     GET('/api/nav/tree/rvt', rvt_tree_handler),
     GET('/api/nav/file', get_file),
-    route_context('/api', 
-       api.tests.routes
-    ),
+    route_context('/api', tests.routes),
     GET('/stream', stream_handler),
     GET('/*', static_resources)
 ]
