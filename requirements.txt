@@ -1,2 +1,4 @@
 waitress
 click
+flask
+flask_cors
