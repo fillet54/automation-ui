@@ -61,6 +61,11 @@ class Symbol(str):
     def __eq__(self, val):
         if isinstance(val, type(self)):
             return super().__eq__(val) and self.namespace == val.namespace
+        elif isinstance(val, str):
+            if self.namespace is not None:
+                return f"{self.namespace}/{self}" == val
+            else:
+                return super().__eq__(val)
         return False
     
     @property
@@ -71,10 +76,10 @@ class Symbol(str):
         if self.namespace is None:
             return self
         else:
-            return self.namespace + '/' + self
+            return f"{self.namespace}/{self}"
         
     def __hash__(self):
-        return hash('symbol' + self)
+        return hash(str(self))
 #cell
 
 def is_special(ch):     return ch in '-+.'
